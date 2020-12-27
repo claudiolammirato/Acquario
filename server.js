@@ -9,7 +9,7 @@ http.createServer((req, resp) =>{
 
      switch (pathname) {
          case '/':
-          const index = fs.createReadStream('./HTTP/index.html');
+          const index = fs.createReadStream('./index.html');
              resp.writeHead(200,{'Conten-Type' : 'text/html'});
              index.pipe(resp);
              break;
