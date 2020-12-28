@@ -15,17 +15,25 @@
             alert('Please, enter a city or a post code');
             return;
         }
-
+        const doc = document;
         const city = form.city.value.trim();
         const zip = form.zip.value.trim();
+        let countryCode = doc.querySelector('#country_code');
         let serverUrl = SERVER_URL + 'getWeather/';
         if(city){
             serverUrl += city;
         } else {
             serverUrl +=zip;
         }
+        if(countryCode && countryCode.value){
+            serverUrl +='?country_code=' + countryCode.value;
+        }
 
-        const doc = document;
+        if(navigator.language){
+            const lang = navigator.language.split('-');
+            serverUrl +=serverUrl.includes('?')?'&lang='+lang[0] : '?lang=' + lang[0];
+        }
+
         let cityname = doc.querySelector('#cityname');
         let weather = doc.querySelector('#weather');
         let temp = doc.querySelector('#temp');
@@ -33,7 +41,7 @@
         let maxTemp = doc.querySelector('#max-temp');
 
         cityname.innerHTML = '';
-        temp.innerHTML = '';
+        weather.innerHTML = '';
         temp.innerHTML = '';
         minTemp.innerHTML = '';
         maxTemp.innerHTML = '';
@@ -45,7 +53,7 @@
             let maxTemp = doc.querySelector('#max-temp');
 
             cityname.innerHTML = resp.data.name;
-            temp.innerHTML = resp.data.weather[0].description;
+            weather.innerHTML = resp.data.weather[0].description;
             temp.innerHTML = resp.data.main.temp;
             minTemp.innerHTML = resp.data.main.temp_min;
             maxTemp.innerHTML = resp.data.main.temp_max;
@@ -80,6 +88,7 @@
         <div class="form-group">
             <label for="city">COUNTRY</label>
             <select class="form-control" name="country_code" id="country_code">
+                <option value="">SELECT</option>
             </select>
         </div>
        <div class="form-group">
