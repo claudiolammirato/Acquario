@@ -1,22 +1,15 @@
-function processResponse(resp) {
-    let response ='';
-    resp.on('data',chunk =>{
-        response += chunk;
-    });
-    resp.on('end', () =>{
-        try{
-            let output = '';
-            const weatherObj = JSON.parse(response);
-            const descr = weatherObj.weather[0].description;
-            const minTemp = weatherObj.main.temp_min;
-            const maxTemp = weatherObj.main.temp_max;
-            output += 'The weather is ' + descr;
-            output += '.Temperature between ' + minTemp + ' and ' + maxTemp;
-            console.log(output);
-        } catch (e) {
-            console.log(e.message);
-        }
+const {WEATHER_API} = require('./constants');
+const axios = require('axios');
 
-    });
+const getWeather = async params =>{
+    try{
+    const result = await axios.get(WEATHER_API,{params});
+    return result.data;
+    } catch (e) {
+        console.log(e);
+        throw e.response.data;
+    }
+    
 }
-exports.processResponse = processResponse;
+
+module.exports.getWeather = getWeather;
